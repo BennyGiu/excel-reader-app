@@ -1,46 +1,37 @@
-import Alert from "./components/Alert";
-import Button from "./components/Button";
-import ListGroup from "./components/ListGroup";
-import Message from "./Message";
+import Body from "./components/Body";
+import NavBar from "./components/NavBar";
 import { useState } from "react";
+import "./App.css";
 
 function App() {
-  /*let items = [
-    "Genshin Impact",
-    "Honkai star Rail",
-    "Reverse 1999",
-    "Arknights",
-  ];
+  const [fileCaricato, setfileCaricato] = useState("no");
+  const [fileName, setFileName] = useState("");
+  const [testo, setTesto] = useState("");
 
-  let heading = "Giochi";
-
-  items = ["Palermo", "Roma", "Milano", "Torino"];
-  heading = "Città";
-
-  const handleSelectItem = (item) => {
-    console.log(item);
+  const handleFileChange = (event) => {
+    if (event.target.files) {
+      setFileName(event.target.files[0].name);
+      event.target.files[0].text().then((text) => setTesto(text));
+      //setTesto(file.text().then((text) => text));
+    }
   };
 
   return (
-    <div className="App">
-      <ListGroup
-        items={items}
-        heading={heading}
-        onSelectItem={handleSelectItem}
-      />
-    </div>
-  );*/
-
-  const [showAlert, setShowAlert] = useState(false);
-
-  return (
-    <div>
-      {showAlert && (
-        <Alert onClose={() => setShowAlert(false)}>Bomboclat!</Alert>
-      )}
-      <Button color="danger" onClick={() => setShowAlert(true)}>
-        Nice Button
-      </Button>
+    <div className="d-flex flex-column vh-100">
+      <NavBar
+        onClick={() => {
+          setfileCaricato("caricando");
+        }}
+      ></NavBar>
+      <Body
+        fileCaricato={fileCaricato}
+        handleFileChange={handleFileChange}
+        onUpload={() => {
+          setfileCaricato("caricato");
+        }}
+        testo={testo}
+        fileName={fileName}
+      ></Body>
     </div>
   );
 }
