@@ -7,6 +7,7 @@ function App() {
   const [fileCaricato, setfileCaricato] = useState("no");
   const [fileName, setFileName] = useState("");
   const [testo, setTesto] = useState("");
+  const [giorno, setGiorno] = useState("");
 
   const handleFileChange = (event) => {
     if (event.target.files) {
@@ -14,6 +15,11 @@ function App() {
       event.target.files[0].text().then((text) => setTesto(text));
       //setTesto(file.text().then((text) => text));
     }
+  };
+
+  const handleSetGiorno = (giornoDaMostrare) => {
+    setfileCaricato("giorno");
+    setGiorno(giornoDaMostrare);
   };
 
   return (
@@ -31,6 +37,8 @@ function App() {
         }}
         testo={testo}
         fileName={fileName}
+        handleSetGiorno={handleSetGiorno}
+        giorno={giorno}
       ></Body>
     </div>
   );
