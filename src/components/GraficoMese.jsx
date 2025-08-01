@@ -75,8 +75,8 @@ function GraficoMese({ testo, fileName, handleSetGiorno, setDatiGiorno }) {
   };
 
   return (
-    <div className="row-auto vh-100 d-flex justify-content-center align-items-center">
-      <Bar options={options} data={data} />
+    <div className="flex-grow-1 overflow-auto mh-0 d-flex flex-column justify-content-center align-items-center">
+      <Bar className="overflow-auto" options={options} data={data} />
     </div>
   );
 }

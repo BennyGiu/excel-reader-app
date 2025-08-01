@@ -23,7 +23,7 @@ function App() {
   };
 
   return (
-    <div className="d-flex flex-column vh-100">
+    <div className="d-flex flex-column h-100">
       <NavBar
         onClick={() => {
           setfileCaricato("caricando");

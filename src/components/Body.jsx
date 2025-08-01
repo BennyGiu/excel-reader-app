@@ -16,13 +16,13 @@ function Body({
   switch (fileCaricato) {
     case "no":
       return (
-        <div className="vh-100 d-flex justify-content-center align-items-center">
+        <div className="h-100 d-flex justify-content-center align-items-center">
           Prima di iniziare carica un file csv con la giusta formattazione
         </div>
       );
     case "caricando":
       return (
-        <div className="mx-auto vh-100 d-flex align-items-center row-auto">
+        <div className="mx-auto h-100 d-flex align-items-center row-auto">
           <input
             className="form-control col m-3"
             type="file"
