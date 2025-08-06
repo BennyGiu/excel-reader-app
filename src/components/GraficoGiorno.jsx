@@ -25,7 +25,14 @@ ChartJS.register(
   Legend
 );
 
-function GraficoGiorno({ giorno, datiGiorno }) {
+function GraficoGiorno({
+  giorno,
+  datiGiorno,
+  onClickLeftButton,
+  onClickRightButton,
+  disableLeft,
+  disableRight,
+}) {
   const options = {
     responsive: true,
     plugins: {
@@ -69,7 +76,11 @@ function GraficoGiorno({ giorno, datiGiorno }) {
 
   return (
     <div className="d-flex flex-row flex-grow-1 overflow-auto">
-      <Button className="align-self-center ms-3 btn-link btn-outline-info d-flex align-items-center justify-content-center">
+      <Button
+        disabled={disableLeft}
+        onClick={onClickLeftButton}
+        className="align-self-center ms-3 btn-link btn-outline-info d-flex align-items-center justify-content-center"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -87,7 +98,11 @@ function GraficoGiorno({ giorno, datiGiorno }) {
       <div className="flex-grow-1 overflow-auto mh-0 d-flex flex-column justify-content-center align-items-center">
         <Bar className="overflow-auto" options={options} data={data} />
       </div>
-      <Button className="align-self-center me-3 btn-link btn-outline-info d-flex align-items-center justify-content-center">
+      <Button
+        disabled={disableRight}
+        onClick={onClickRightButton}
+        className="align-self-center me-3 btn-link btn-outline-info d-flex align-items-center justify-content-center"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

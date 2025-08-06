@@ -24,8 +24,14 @@ ChartJS.register(
   Legend
 );
 
-function GraficoMese({ testo, fileName, handleSetGiorno, setDatiGiorno }) {
-  let dati = [];
+function GraficoMese({
+  valori,
+  fileName,
+  handleSetGiorno,
+  setDatiGiorno,
+  labels,
+}) {
+  /*let dati = [];
   dati = testo.split("\n");
   dati.shift();
   dati.pop();
@@ -35,9 +41,9 @@ function GraficoMese({ testo, fileName, handleSetGiorno, setDatiGiorno }) {
     let valoriIniziali = dato[0].split(" ");
     dato.shift();
     valori[valoriIniziali[0]] = dato;
-  });
+  });*/
 
-  let labels = Object.getOwnPropertyNames(valori);
+  //let labels = Object.getOwnPropertyNames(valori);
 
   const options = {
     responsive: true,
@@ -53,8 +59,7 @@ function GraficoMese({ testo, fileName, handleSetGiorno, setDatiGiorno }) {
     onClick: (event, activeElements) => {
       if (activeElements[0]) {
         let index = activeElements[0]["index"];
-        setDatiGiorno(valori[labels[index]]);
-        handleSetGiorno(labels[index]);
+        handleSetGiorno(labels[index], index);
       }
     },
   };

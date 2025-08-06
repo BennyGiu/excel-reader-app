@@ -1,18 +1,21 @@
 import GraficoGiorno from "./GraficoGiorno";
 import GraficoMese from "./GraficoMese";
-import { useState } from "react";
 
 function Body({
   fileCaricato,
   handleFileChange,
   onUpload,
-  testo,
+  valori,
   fileName,
   handleSetGiorno,
   giorno,
+  datiGiorno,
+  changeToPreviousDay,
+  changeToNextDay,
+  labels,
+  disableLeft,
+  disableRight,
 }) {
-  const [datiGiorno, setDatiGiorno] = useState("");
-
   switch (fileCaricato) {
     case "no":
       return (
@@ -41,14 +44,24 @@ function Body({
     case "caricato":
       return (
         <GraficoMese
-          testo={testo}
+          valori={valori}
           fileName={fileName}
           handleSetGiorno={handleSetGiorno}
-          setDatiGiorno={setDatiGiorno}
+          //setDatiGiorno={setDatiGiorno}
+          labels={labels}
         />
       );
     case "giorno":
-      return <GraficoGiorno giorno={giorno} datiGiorno={datiGiorno} />;
+      return (
+        <GraficoGiorno
+          onClickLeftButton={changeToPreviousDay}
+          onClickRightButton={changeToNextDay}
+          giorno={giorno}
+          datiGiorno={datiGiorno}
+          disableLeft={disableLeft}
+          disableRight={disableRight}
+        />
+      );
   }
 }
 
