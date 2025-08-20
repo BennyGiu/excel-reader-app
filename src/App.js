@@ -58,6 +58,7 @@ function App() {
   return (
     <div className="d-flex flex-column h-100">
       <NavBar
+        fileCaricato={fileCaricato}
         onClick={() => {
           setfileCaricato("caricando");
         }}
@@ -92,6 +93,9 @@ function App() {
         labels={labels}
         disableLeft={disableLeft}
         disableRight={disableRight}
+        mostraGraficoMese={() => {
+          setfileCaricato("caricato");
+        }}
       ></Body>
     </div>
   );

@@ -11,6 +11,7 @@ import {
   BarElement,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useState } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -24,27 +25,8 @@ ChartJS.register(
   Legend
 );
 
-function GraficoMese({
-  valori,
-  fileName,
-  handleSetGiorno,
-  setDatiGiorno,
-  labels,
-}) {
-  /*let dati = [];
-  dati = testo.split("\n");
-  dati.shift();
-  dati.pop();
-  dati.map((dato, index) => (dati[index] = dato.split(";")));
-  let valori = {};
-  dati.map((dato, index) => {
-    let valoriIniziali = dato[0].split(" ");
-    dato.shift();
-    valori[valoriIniziali[0]] = dato;
-  });*/
-
-  //let labels = Object.getOwnPropertyNames(valori);
-
+function GraficoMese({ valori, fileName, handleSetGiorno, labels }) {
+  const [mostraGrafico, setMostraGrafico] = useState(true);
   const options = {
     responsive: true,
     plugins: {
@@ -74,14 +56,39 @@ function GraficoMese({
           dayArray = valori[item];
           return dayArray.reduce((a, b) => +a + +b, 0);
         }),
-        backgroundColor: "rgba(30, 238, 238, 0.5)",
+        backgroundColor: "rgba(13, 210, 253, 1)",
       },
     ],
   };
 
   return (
-    <div className="flex-grow-1 overflow-auto mh-0 d-flex flex-column justify-content-center align-items-center">
-      <Bar className="overflow-auto" options={options} data={data} />
+    <div className="flex-grow-1 overflow-auto mh-0 ms-3 me-3 mb-2 d-flex flex-column justify-content-center align-items-center">
+      <button
+        type="button"
+        class="btn btn-light"
+        onClick={() => setMostraGrafico(!mostraGrafico)}
+      >
+        Mostra {mostraGrafico ? "Statistiche" : "Grafico"} Mese
+      </button>
+      {(() => {
+        if (mostraGrafico) {
+          return (
+            <Bar className="overflow-auto" options={options} data={data} />
+          );
+        } else {
+          return (
+            <div>
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum."
+            </div>
+          );
+        }
+      })()}
     </div>
   );
 }

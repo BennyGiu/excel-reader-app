@@ -15,6 +15,7 @@ function Body({
   labels,
   disableLeft,
   disableRight,
+  mostraGraficoMese,
 }) {
   switch (fileCaricato) {
     case "no":
@@ -47,7 +48,6 @@ function Body({
           valori={valori}
           fileName={fileName}
           handleSetGiorno={handleSetGiorno}
-          //setDatiGiorno={setDatiGiorno}
           labels={labels}
         />
       );
@@ -60,6 +60,7 @@ function Body({
           datiGiorno={datiGiorno}
           disableLeft={disableLeft}
           disableRight={disableRight}
+          mostraGraficoMese={mostraGraficoMese}
         />
       );
   }
