@@ -30,6 +30,8 @@ function Body({
           <input
             className="form-control col m-3"
             type="file"
+            accept=".csv"
+            multiple
             id="formFile"
             onChange={handleFileChange}
           ></input>
