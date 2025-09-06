@@ -12,15 +12,19 @@ function Body({
   datiGiorno,
   changeToPreviousDay,
   changeToNextDay,
+  changeToPreviousMonth,
+  changeToNextMonth,
   labels,
   disableLeft,
   disableRight,
+  disableLeftMonth,
+  disableRightMonth,
   mostraGraficoMese,
 }) {
   switch (fileCaricato) {
     case "no":
       return (
-        <div className="h-100 d-flex justify-content-center align-items-center">
+        <div className="text-center h-100 d-flex justify-content-center align-items-center">
           Prima di iniziare carica un file csv con la giusta formattazione
         </div>
       );
@@ -51,6 +55,10 @@ function Body({
           fileName={fileName}
           handleSetGiorno={handleSetGiorno}
           labels={labels}
+          onClickLeftButton={changeToPreviousMonth}
+          onClickRightButton={changeToNextMonth}
+          disableLeft={disableLeftMonth}
+          disableRight={disableRightMonth}
         />
       );
     case "giorno":
@@ -65,6 +73,8 @@ function Body({
           mostraGraficoMese={mostraGraficoMese}
         />
       );
+    default:
+      return <div>Siamo nella merda</div>;
   }
 }
 

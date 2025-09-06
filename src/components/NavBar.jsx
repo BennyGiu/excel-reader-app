@@ -2,7 +2,9 @@ function NavBar({ onClick, fileCaricato }) {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary mb-2">
       <div className="container-fluid">
-        <a className="navbar-brand">E-Distribuzione excel reader</a>
+        <a href="/#" className="navbar-brand">
+          E-Distribuzione excel reader
+        </a>
         <button
           className="navbar-toggler"
           type="button"

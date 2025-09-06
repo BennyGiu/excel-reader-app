@@ -6,19 +6,38 @@ import "./App.css";
 function App() {
   const [fileCaricato, setfileCaricato] = useState("no");
   const [fileName, setFileName] = useState("");
-  const [testo, setTesto] = useState("");
+  const [testo, setTesto] = useState({});
+  const [months, setMonths] = useState([]);
   const [giorno, setGiorno] = useState("");
   const [valori, setValori] = useState({});
   const [labels, setLabels] = useState([]);
   const [datiGiorno, setDatiGiorno] = useState("");
   const [disableLeft, setDisableLeft] = useState(false);
   const [disableRight, setDisableRight] = useState(false);
+  const [disableLeftMonth, setDisableLeftMonth] = useState(false);
+  const [disableRightMonth, setDisableRightMonth] = useState(false);
 
   const handleFileChange = (event) => {
     if (event.target.files) {
       setFileName(event.target.files[0].name);
-      event.target.files[0].text().then((text) => setTesto(text));
-      //setTesto(file.text().then((text) => text));
+      var texts = {};
+      var monthsArray = [];
+      for (const prop of Object.getOwnPropertyNames(testo)) {
+        delete testo[prop];
+      }
+      for (const file of event.target.files) {
+        //event.target.files[0].text().then((text) => setTesto(text));
+        texts = testo;
+        file.text().then((text) => {
+          monthsArray.push(file.name);
+          setMonths(monthsArray);
+          texts[file.name] = text;
+          setTesto(texts);
+        });
+      }
+      for (const prop of Object.getOwnPropertyNames(texts)) {
+        delete texts[prop];
+      }
     }
   };
 
@@ -41,7 +60,7 @@ function App() {
   const handleUploadFile = () => {
     for (var member in valori) delete valori[member];
     let dati = [];
-    dati = testo.split("\n");
+    dati = testo[fileName].split("\n");
     dati.shift();
     dati.pop();
     dati.map((dato, index) => (dati[index] = dato.split(";")));
@@ -50,6 +69,20 @@ function App() {
       dato.shift();
       valori[valoriIniziali[0]] = dato;
     });
+
+    if (months.length === 1) {
+      setDisableLeftMonth(true);
+      setDisableRightMonth(true);
+    } else if (months.indexOf(fileName) === months.length - 1) {
+      setDisableLeftMonth(false);
+      setDisableRightMonth(true);
+    } else if (months.indexOf(fileName) === 0) {
+      setDisableLeftMonth(true);
+      setDisableRightMonth(false);
+    } else {
+      setDisableLeftMonth(false);
+      setDisableRightMonth(false);
+    }
     setValori(valori);
     setLabels(Object.getOwnPropertyNames(valori));
     setfileCaricato("caricato");
@@ -90,9 +123,55 @@ function App() {
           setGiorno(labels[index + 1]);
           setDatiGiorno(valori[labels[index + 1]]);
         }}
+        changeToPreviousMonth={() => {
+          setDisableRightMonth(false);
+          let index = months.indexOf(fileName);
+          if (index === 1) {
+            setDisableLeftMonth(true);
+          }
+          for (var member in valori) delete valori[member];
+          let dati = [];
+          dati = testo[months[index - 1]].split("\n");
+          dati.shift();
+          dati.pop();
+          dati.map((dato, index) => (dati[index] = dato.split(";")));
+          dati.forEach((dato, index) => {
+            let valoriIniziali = dato[0].split(" ");
+            dato.shift();
+            valori[valoriIniziali[0]] = dato;
+          });
+          setFileName(months[index - 1]);
+          setValori(valori);
+          setLabels(Object.getOwnPropertyNames(valori));
+          //handleUploadFile();
+        }}
+        changeToNextMonth={() => {
+          setDisableLeftMonth(false);
+          let index = months.indexOf(fileName);
+          if (index === months.length - 2) {
+            setDisableRightMonth(true);
+          }
+          for (var member in valori) delete valori[member];
+          let dati = [];
+          dati = testo[months[index + 1]].split("\n");
+          dati.shift();
+          dati.pop();
+          dati.map((dato, index) => (dati[index] = dato.split(";")));
+          dati.forEach((dato, index) => {
+            let valoriIniziali = dato[0].split(" ");
+            dato.shift();
+            valori[valoriIniziali[0]] = dato;
+          });
+          setFileName(months[index + 1]);
+          setValori(valori);
+          setLabels(Object.getOwnPropertyNames(valori));
+          //handleUploadFile();
+        }}
         labels={labels}
         disableLeft={disableLeft}
         disableRight={disableRight}
+        disableLeftMonth={disableLeftMonth}
+        disableRightMonth={disableRightMonth}
         mostraGraficoMese={() => {
           setfileCaricato("caricato");
         }}
