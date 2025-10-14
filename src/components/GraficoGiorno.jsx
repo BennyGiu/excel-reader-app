@@ -12,6 +12,7 @@ import {
   BarElement,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useState } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -34,6 +35,8 @@ function GraficoGiorno({
   disableRight,
   mostraGraficoMese,
 }) {
+  const [intervalloGrafico, setIntervalloGrafico] = useState("60");
+
   const options = {
     responsive: true,
     plugins: {
@@ -48,42 +51,124 @@ function GraficoGiorno({
   };
 
   let labels = [];
-
-  for (let i = 0; i < 24; i++) {
-    labels.push(i + "-" + (i + 1));
-  }
-
   let valori = [];
+  let data = {};
 
-  for (let i = 0; i < 96; i = i + 4) {
-    valori.push(
-      +datiGiorno[i] +
-        +datiGiorno[i + 1] +
-        +datiGiorno[i + 2] +
-        +datiGiorno[i + 3]
-    );
+  switch (intervalloGrafico) {
+    case "60":
+      for (let i = 0; i < 24; i++) {
+        labels.push(i + "-" + (i + 1));
+      }
+      for (let i = 0; i < 96; i = i + 4) {
+        valori.push(
+          +datiGiorno[i] +
+            +datiGiorno[i + 1] +
+            +datiGiorno[i + 2] +
+            +datiGiorno[i + 3]
+        );
+      }
+      data = {
+        labels,
+        datasets: [
+          {
+            label: "kWh",
+            data: valori,
+            backgroundColor: "rgba(13, 210, 253, 1)",
+          },
+        ],
+      };
+
+      break;
+    case "30":
+      for (let i = 0; i < 48; i++) {
+        if (i % 2 === 0) {
+          labels.push(i / 2 + ":00" + "-" + i / 2 + ":30");
+        } else {
+          labels.push(
+            Math.floor(i / 2) + ":30" + "-" + (Math.floor(i / 2) + 1) + ":00"
+          );
+        }
+      }
+      for (let i = 0; i < 96; i = i + 2) {
+        valori.push(+datiGiorno[i] + +datiGiorno[i + 1]);
+      }
+      data = {
+        labels,
+        datasets: [
+          {
+            label: "kWh",
+            data: valori,
+            backgroundColor: "rgba(13, 210, 253, 1)",
+          },
+        ],
+      };
+      break;
+    case "15":
+      for (let i = 0; i < 96; i++) {
+        if (i % 4 === 0) {
+          labels.push(i / 4 + ":00" + "-" + i / 4 + ":15");
+        } else if (i % 4 === 1) {
+          labels.push(
+            Math.floor(i / 4) + ":15" + "-" + Math.floor(i / 4) + ":30"
+          );
+        } else if (i % 4 === 2) {
+          labels.push(
+            Math.floor(i / 4) + ":30" + "-" + Math.floor(i / 4) + ":45"
+          );
+        } else if (i % 4 === 3) {
+          labels.push(
+            Math.floor(i / 4) + ":45" + "-" + (Math.floor(i / 4) + 1) + ":00"
+          );
+        }
+      }
+      for (let i = 0; i < 96; i++) {
+        valori.push(+datiGiorno[i]);
+      }
+      data = {
+        labels,
+        datasets: [
+          {
+            label: "kWh",
+            data: valori,
+            backgroundColor: "rgba(13, 210, 253, 1)",
+          },
+        ],
+      };
+      break;
+    default:
+      break;
   }
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "kWh",
-        data: valori,
-        backgroundColor: "rgba(13, 210, 253, 1)",
-      },
-    ],
+  const handleChangeIntervallo = (event) => {
+    setIntervalloGrafico(event.target.value);
   };
 
   return (
     <div className="flex-grow-1 overflow-auto mh-0 mb-2 d-flex flex-column justify-content-center align-items-center">
-      <button
-        type="button"
-        className="btn btn-light"
-        onClick={mostraGraficoMese}
-      >
-        Ritorna al Grafico del Mese
-      </button>
+      <div className="d-flex flex-row justify-content-center align-items-center">
+        <div>Intervallo:</div>
+        <div className="mx-2">
+          <select
+            defaultValue="60"
+            className="form-select"
+            aria-label="Default select example"
+            onChange={handleChangeIntervallo}
+          >
+            <option value="60">60 minuti</option>
+            <option value="30">30 minuti</option>
+            <option value="15">15 minuti</option>
+          </select>
+        </div>
+        <div className="mx-2">
+          <button
+            type="button"
+            className="btn btn-light"
+            onClick={mostraGraficoMese}
+          >
+            Ritorna al Grafico del Mese
+          </button>
+        </div>
+      </div>
       <div className="d-flex flex-row flex-grow-1 overflow-auto w-100">
         <Button
           disabled={disableLeft}
