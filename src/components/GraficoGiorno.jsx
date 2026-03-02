@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useState } from "react";
+import { motion } from "motion/react";
 
 ChartJS.register(
   CategoryScale,
@@ -23,7 +24,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 function GraficoGiorno({
@@ -64,7 +65,7 @@ function GraficoGiorno({
           +datiGiorno[i] +
             +datiGiorno[i + 1] +
             +datiGiorno[i + 2] +
-            +datiGiorno[i + 3]
+            +datiGiorno[i + 3],
         );
       }
       data = {
@@ -85,7 +86,7 @@ function GraficoGiorno({
           labels.push(i / 2 + ":00" + "-" + i / 2 + ":30");
         } else {
           labels.push(
-            Math.floor(i / 2) + ":30" + "-" + (Math.floor(i / 2) + 1) + ":00"
+            Math.floor(i / 2) + ":30" + "-" + (Math.floor(i / 2) + 1) + ":00",
           );
         }
       }
@@ -109,15 +110,15 @@ function GraficoGiorno({
           labels.push(i / 4 + ":00" + "-" + i / 4 + ":15");
         } else if (i % 4 === 1) {
           labels.push(
-            Math.floor(i / 4) + ":15" + "-" + Math.floor(i / 4) + ":30"
+            Math.floor(i / 4) + ":15" + "-" + Math.floor(i / 4) + ":30",
           );
         } else if (i % 4 === 2) {
           labels.push(
-            Math.floor(i / 4) + ":30" + "-" + Math.floor(i / 4) + ":45"
+            Math.floor(i / 4) + ":30" + "-" + Math.floor(i / 4) + ":45",
           );
         } else if (i % 4 === 3) {
           labels.push(
-            Math.floor(i / 4) + ":45" + "-" + (Math.floor(i / 4) + 1) + ":00"
+            Math.floor(i / 4) + ":45" + "-" + (Math.floor(i / 4) + 1) + ":00",
           );
         }
       }
@@ -189,9 +190,13 @@ function GraficoGiorno({
             />
           </svg>
         </Button>
-        <div className="flex-grow-1 overflow-auto mh-0 d-flex flex-column justify-content-center align-items-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex-grow-1 overflow-auto mh-0 d-flex flex-column justify-content-center align-items-center"
+        >
           <Bar className="overflow-auto" options={options} data={data} />
-        </div>
+        </motion.div>
         <Button
           disabled={disableRight}
           onClick={onClickRightButton}

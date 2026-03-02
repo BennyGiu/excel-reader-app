@@ -1,5 +1,6 @@
 import Body from "./components/Body";
 import NavBar from "./components/NavBar";
+import Alert from "./components/Alert";
 import { useState } from "react";
 import "./App.css";
 
@@ -7,6 +8,7 @@ function App() {
   const [fileCaricato, setfileCaricato] = useState("no");
   const [fileName, setFileName] = useState("");
   const [testo, setTesto] = useState({});
+  const [error, setError] = useState("");
   const [months, setMonths] = useState([]);
   const [giorno, setGiorno] = useState("");
   const [valori, setValori] = useState({});
@@ -19,20 +21,24 @@ function App() {
 
   const handleFileChange = (event) => {
     if (event.target.files) {
-      setFileName(event.target.files[0].name);
+      //setFileName(event.target.files[0].name);
+      setError("");
       var texts = {};
       var monthsArray = [];
       for (const prop of Object.getOwnPropertyNames(testo)) {
         delete testo[prop];
       }
       for (const file of event.target.files) {
-        //event.target.files[0].text().then((text) => setTesto(text));
-        texts = testo;
         file.text().then((text) => {
-          monthsArray.push(file.name);
+          let monthAndYear = text.substring(
+            text.indexOf("/") + 1,
+            text.indexOf("/") + 8,
+          );
+          monthsArray.push(monthAndYear);
           setMonths(monthsArray);
-          texts[file.name] = text;
+          texts[monthAndYear] = text;
           setTesto(texts);
+          setFileName(monthsArray[0]);
         });
       }
       for (const prop of Object.getOwnPropertyNames(texts)) {
@@ -58,6 +64,10 @@ function App() {
   };
 
   const handleUploadFile = () => {
+    if (fileName === "") {
+      setError("Seleziona almeno un file da caricare");
+      return;
+    }
     for (var member in valori) delete valori[member];
     let dati = [];
     dati = testo[fileName].split("\n");
@@ -94,8 +104,11 @@ function App() {
         fileCaricato={fileCaricato}
         onClick={() => {
           setfileCaricato("caricando");
+          setFileName("");
+          setTesto({});
         }}
       ></NavBar>
+      <Alert resetAlert={() => setError("")} message={error} />
       <Body
         fileCaricato={fileCaricato}
         handleFileChange={handleFileChange}

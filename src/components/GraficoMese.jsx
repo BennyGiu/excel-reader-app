@@ -14,6 +14,7 @@ import { Bar } from "react-chartjs-2";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import StatCard from "./StatCard";
+import { motion } from "motion/react";
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +25,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 function GraficoMese({
@@ -46,7 +47,7 @@ function GraficoMese({
       },
       title: {
         display: true,
-        text: fileName.split(".")[0],
+        text: fileName,
       },
     },
     onClick: (event, activeElements) => {
@@ -178,7 +179,7 @@ function GraficoMese({
         +valori[property][i] +
           +valori[property][i + 1] +
           +valori[property][i + 2] +
-          +valori[property][i + 3]
+          +valori[property][i + 3],
       );
     }
   }
@@ -276,11 +277,27 @@ function GraficoMese({
           {(() => {
             if (mostraGrafico) {
               return (
-                <Bar className="overflow-auto" options={options} data={data} />
+                <motion.div
+                  key={"grafico"}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="d-flex flex-column h-100 w-100 align-items-center"
+                >
+                  <Bar
+                    className="overflow-auto"
+                    options={options}
+                    data={data}
+                  />
+                </motion.div>
               );
             } else {
               return (
-                <div className="container overflow-auto">
+                <motion.div
+                  key={"statistiche"}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="container overflow-auto"
+                >
                   <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 p-1">
                     <StatCard title="kWh Totali" value={kWhTotali} />
                     <StatCard title="kWh F1" value={kWhF1} />
@@ -328,7 +345,7 @@ function GraficoMese({
                       }
                     />
                   </div>
-                </div>
+                </motion.div>
               );
             }
           })()}
