@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/excel-reader-app/static/css/main.222abb52.css",
-    "main.js": "/excel-reader-app/static/js/main.4eea79b0.js",
+    "main.js": "/excel-reader-app/static/js/main.d8e0eae4.js",
     "static/js/453.87b864bf.chunk.js": "/excel-reader-app/static/js/453.87b864bf.chunk.js",
     "index.html": "/excel-reader-app/index.html",
     "main.222abb52.css.map": "/excel-reader-app/static/css/main.222abb52.css.map",
-    "main.4eea79b0.js.map": "/excel-reader-app/static/js/main.4eea79b0.js.map",
+    "main.d8e0eae4.js.map": "/excel-reader-app/static/js/main.d8e0eae4.js.map",
     "453.87b864bf.chunk.js.map": "/excel-reader-app/static/js/453.87b864bf.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.222abb52.css",
-    "static/js/main.4eea79b0.js"
+    "static/js/main.d8e0eae4.js"
   ]
 }
