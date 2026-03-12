@@ -31,7 +31,8 @@ function Body({
           animate={{ opacity: 1 }}
           className="text-center h-100 d-flex justify-content-center align-items-center"
         >
-          Prima di iniziare carica un file csv con la giusta formattazione
+          Per iniziare carica uno o più file csv scaricati dall'app
+          e-Distribuzione o che seguono la stessa formattazione
         </motion.div>
       );
     case "caricando":
@@ -85,7 +86,7 @@ function Body({
         />
       );
     default:
-      return <div>Siamo nella merda</div>;
+      return <div>Errore non riconosciuto</div>;
   }
 }
 

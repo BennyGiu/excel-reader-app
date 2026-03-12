@@ -281,7 +281,7 @@ function GraficoMese({
                   key={"grafico"}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="d-flex flex-column h-100 w-100 align-items-center"
+                  className="d-flex flex-column h-100 w-100 align-items-center justify-content-center"
                 >
                   <Bar
                     className="overflow-auto"

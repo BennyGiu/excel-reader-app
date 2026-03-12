@@ -21,7 +21,6 @@ function App() {
 
   const handleFileChange = (event) => {
     if (event.target.files) {
-      //setFileName(event.target.files[0].name);
       setError("");
       var texts = {};
       var monthsArray = [];
@@ -98,6 +97,63 @@ function App() {
     setfileCaricato("caricato");
   };
 
+  const handleClickProva = async () => {
+    setError("");
+    var texts = {};
+    var monthsArray = [];
+    for (const prop of Object.getOwnPropertyNames(testo)) {
+      delete testo[prop];
+    }
+    const file_di_prova = [
+      process.env.PUBLIC_URL + "/2024-04.csv",
+      process.env.PUBLIC_URL + "/2024-05.csv",
+      process.env.PUBLIC_URL + "/2024-06.csv",
+    ];
+    for (const file of file_di_prova) {
+      const handleFile = await fetch(file);
+      const text = await handleFile.text();
+      let monthAndYear = text.substring(
+        text.indexOf("/") + 1,
+        text.indexOf("/") + 8,
+      );
+      monthsArray.push(monthAndYear);
+      setMonths(monthsArray);
+      texts[monthAndYear] = text;
+      setTesto(texts);
+      setFileName(monthsArray[0]);
+    }
+
+    for (var member in valori) delete valori[member];
+
+    let dati = [];
+    dati = texts[monthsArray[0]].split("\n");
+    dati.shift();
+    dati.pop();
+    dati.map((dato, index) => (dati[index] = dato.split(";")));
+    dati.forEach((dato, index) => {
+      let valoriIniziali = dato[0].split(" ");
+      dato.shift();
+      valori[valoriIniziali[0]] = dato;
+    });
+
+    if (monthsArray.length === 1) {
+      setDisableLeftMonth(true);
+      setDisableRightMonth(true);
+    } else if (monthsArray.indexOf(monthsArray[0]) === monthsArray.length - 1) {
+      setDisableLeftMonth(false);
+      setDisableRightMonth(true);
+    } else if (monthsArray.indexOf(monthsArray[0]) === 0) {
+      setDisableLeftMonth(true);
+      setDisableRightMonth(false);
+    } else {
+      setDisableLeftMonth(false);
+      setDisableRightMonth(false);
+    }
+    setValori(valori);
+    setLabels(Object.getOwnPropertyNames(valori));
+    setfileCaricato("caricato");
+  };
+
   return (
     <div className="d-flex flex-column h-100">
       <NavBar
@@ -106,7 +162,13 @@ function App() {
           setfileCaricato("caricando");
           setFileName("");
           setTesto({});
+          setMonths([]);
+          setValori({});
+          setLabels([]);
+          setDatiGiorno("");
+          setGiorno("");
         }}
+        onClickProva={handleClickProva}
       ></NavBar>
       <Alert resetAlert={() => setError("")} message={error} />
       <Body
