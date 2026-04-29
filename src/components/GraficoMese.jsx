@@ -37,8 +37,25 @@ function GraficoMese({
   onClickLeftButton,
   disableRight,
   onClickRightButton,
+  mostraSelezioneMese,
 }) {
   const [mostraGrafico, setMostraGrafico] = useState(true);
+
+  const monthNumberToString = {
+    "01": "Gennaio",
+    "02": "Febbraio",
+    "03": "Marzo",
+    "04": "Aprile",
+    "05": "Maggio",
+    "06": "Giugno",
+    "07": "Luglio",
+    "08": "Agosto",
+    "09": "Settembre",
+    10: "Ottobre",
+    11: "Novembre",
+    12: "Dicembre",
+  };
+
   const options = {
     responsive: true,
     plugins: {
@@ -246,13 +263,22 @@ function GraficoMese({
 
   return (
     <div className="flex-grow-1 overflow-auto mb-2 d-flex flex-column align-items-center">
-      <button
-        type="button"
-        className="btn btn-light"
-        onClick={() => setMostraGrafico(!mostraGrafico)}
-      >
-        Mostra {mostraGrafico ? "Statistiche" : "Grafico"} Mese
-      </button>
+      <div className="d-flex flex-row justify-content-center align-items-center mb-2">
+        <button
+          type="button"
+          className="btn btn-light mx-2"
+          onClick={() => mostraSelezioneMese()}
+        >
+          Seleziona Mese
+        </button>
+        <button
+          type="button"
+          className="btn btn-light mx-2"
+          onClick={() => setMostraGrafico(!mostraGrafico)}
+        >
+          Mostra {mostraGrafico ? "Statistiche" : "Grafico"} Mese
+        </button>
+      </div>
       <div className="d-flex flex-row flex-grow-1 justify-content-center overflow-auto w-100">
         <Button
           disabled={disableLeft}
@@ -298,11 +324,33 @@ function GraficoMese({
                   animate={{ opacity: 1 }}
                   className="container overflow-auto"
                 >
+                  <div className="text-center fs-5 m-1">
+                    Statistiche{" "}
+                    {monthNumberToString[fileName.split("/")[0]] +
+                      " " +
+                      fileName.split("/")[1]}
+                  </div>
                   <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 p-1">
-                    <StatCard title="kWh Totali" value={kWhTotali} />
-                    <StatCard title="kWh F1" value={kWhF1} />
-                    <StatCard title="kWh F2" value={kWhF2} />
-                    <StatCard title="kWh F3" value={kWhF3} />
+                    <StatCard
+                      title="kWh Totali"
+                      value={kWhTotali}
+                      handleClickCard={() => void 0}
+                    />
+                    <StatCard
+                      title="kWh F1"
+                      value={kWhF1}
+                      handleClickCard={() => void 0}
+                    />
+                    <StatCard
+                      title="kWh F2"
+                      value={kWhF2}
+                      handleClickCard={() => void 0}
+                    />
+                    <StatCard
+                      title="kWh F3"
+                      value={kWhF3}
+                      handleClickCard={() => void 0}
+                    />
                     <StatCard
                       title="Giorno con più kWh"
                       value={
@@ -311,6 +359,7 @@ function GraficoMese({
                         valGiornoMaxkWh.toFixed(2) +
                         " kWh"
                       }
+                      handleClickCard={() => void 0}
                     />
                     <StatCard
                       title="Ora con più kWh"
@@ -323,6 +372,7 @@ function GraficoMese({
                         ":00 di giorno " +
                         giornoOraMaxkWh
                       }
+                      handleClickCard={() => void 0}
                     />
                     <StatCard
                       title="Mezz'ora con più kWh"
@@ -333,6 +383,7 @@ function GraficoMese({
                         " di giorno " +
                         giornoMezzoraMaxkWh
                       }
+                      handleClickCard={() => void 0}
                     />
                     <StatCard
                       title="Quarto d'ora con più kWh"
@@ -343,6 +394,7 @@ function GraficoMese({
                         " di giorno " +
                         giornoQuartodoraMaxkWh
                       }
+                      handleClickCard={() => void 0}
                     />
                   </div>
                 </motion.div>

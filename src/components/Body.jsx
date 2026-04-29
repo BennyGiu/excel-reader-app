@@ -1,5 +1,6 @@
 import GraficoGiorno from "./GraficoGiorno";
 import GraficoMese from "./GraficoMese";
+import SelezionaMese from "./SelezionaMese";
 import { motion } from "motion/react";
 
 function Body({
@@ -21,6 +22,9 @@ function Body({
   disableLeftMonth,
   disableRightMonth,
   mostraGraficoMese,
+  months,
+  handleClickCard,
+  mostraSelezioneMese,
 }) {
   switch (fileCaricato) {
     case "no":
@@ -60,6 +64,10 @@ function Body({
           </button>
         </motion.div>
       );
+    case "selezionaMese":
+      return (
+        <SelezionaMese months={months} handleClickCard={handleClickCard} />
+      );
     case "caricato":
       return (
         <GraficoMese
@@ -71,6 +79,7 @@ function Body({
           onClickRightButton={changeToNextMonth}
           disableLeft={disableLeftMonth}
           disableRight={disableRightMonth}
+          mostraSelezioneMese={mostraSelezioneMese}
         />
       );
     case "giorno":

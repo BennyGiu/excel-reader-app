@@ -27,19 +27,36 @@ function App() {
       for (const prop of Object.getOwnPropertyNames(testo)) {
         delete testo[prop];
       }
+
+      const filePromises = [];
       for (const file of event.target.files) {
-        file.text().then((text) => {
+        let filePromise = file.text();
+        filePromises.push(filePromise);
+        filePromise.then((text) => {
           let monthAndYear = text.substring(
             text.indexOf("/") + 1,
             text.indexOf("/") + 8,
           );
           monthsArray.push(monthAndYear);
-          setMonths(monthsArray);
           texts[monthAndYear] = text;
-          setTesto(texts);
-          setFileName(monthsArray[0]);
         });
       }
+
+      Promise.all(filePromises).then(() => {
+        monthsArray.sort((month1, month2) => {
+          let month1Splitted = month1.split("/");
+          let newMonth1 = month1Splitted[1] + month1Splitted[0];
+
+          let month2Splitted = month2.split("/");
+          let newMonth2 = month2Splitted[1] + month2Splitted[0];
+
+          return newMonth1 - newMonth2;
+        });
+        setMonths(monthsArray);
+        setTesto(texts);
+        setFileName(monthsArray[0]);
+      });
+
       for (const prop of Object.getOwnPropertyNames(texts)) {
         delete texts[prop];
       }
@@ -94,7 +111,7 @@ function App() {
     }
     setValori(valori);
     setLabels(Object.getOwnPropertyNames(valori));
-    setfileCaricato("caricato");
+    setfileCaricato("selezionaMese");
   };
 
   const handleClickProva = async () => {
@@ -151,6 +168,39 @@ function App() {
     }
     setValori(valori);
     setLabels(Object.getOwnPropertyNames(valori));
+    setfileCaricato("selezionaMese");
+  };
+
+  const handleClickCard = (chosenMonth) => {
+    //console.log(chosenMonth);
+    for (var member in valori) delete valori[member];
+    let dati = [];
+    dati = testo[chosenMonth].split("\n");
+    dati.shift();
+    dati.pop();
+    dati.map((dato, index) => (dati[index] = dato.split(";")));
+    dati.forEach((dato, index) => {
+      let valoriIniziali = dato[0].split(" ");
+      dato.shift();
+      valori[valoriIniziali[0]] = dato;
+    });
+
+    if (months.length === 1) {
+      setDisableLeftMonth(true);
+      setDisableRightMonth(true);
+    } else if (months.indexOf(chosenMonth) === months.length - 1) {
+      setDisableLeftMonth(false);
+      setDisableRightMonth(true);
+    } else if (months.indexOf(chosenMonth) === 0) {
+      setDisableLeftMonth(true);
+      setDisableRightMonth(false);
+    } else {
+      setDisableLeftMonth(false);
+      setDisableRightMonth(false);
+    }
+    setValori(valori);
+    setLabels(Object.getOwnPropertyNames(valori));
+    setFileName(chosenMonth);
     setfileCaricato("caricato");
   };
 
@@ -250,6 +300,11 @@ function App() {
         mostraGraficoMese={() => {
           setfileCaricato("caricato");
         }}
+        mostraSelezioneMese={() => {
+          setfileCaricato("selezionaMese");
+        }}
+        months={months}
+        handleClickCard={handleClickCard}
       ></Body>
     </div>
   );
