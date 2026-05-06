@@ -1,6 +1,6 @@
 # About
 
-This is a simple single-page application (SPA) that, if you have the right files, can show you charts and stats of your electricity consumption
+This is a simple single-page application (SPA) that, if you have the right files, can show you charts and stats of your electricity consumption. You can try the app [here](https://bennygiu.github.io/excel-reader-app/).
 
 ### Introduction
 
