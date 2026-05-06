@@ -1,4 +1,4 @@
-function NavBar({ onClick, fileCaricato, onClickProva }) {
+function NavBar({ onClick, statoApp, onClickProva }) {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary mb-2">
       <div className="container-fluid">
@@ -21,12 +21,14 @@ function NavBar({ onClick, fileCaricato, onClickProva }) {
             <li className="nav-item">
               <button
                 className={
-                  fileCaricato === "caricando" ? "d-none" : "nav-link active"
+                  statoApp === "caricandoFile" ? "d-none" : "nav-link active"
                 }
                 aria-current="page"
                 onClick={onClick}
               >
-                {fileCaricato === "no" ? "Carica File" : "Carica Nuovo File"}
+                {statoApp === "fileNonCaricati"
+                  ? "Carica File"
+                  : "Carica Nuovi File"}
               </button>
             </li>
             <li className="nav-item">

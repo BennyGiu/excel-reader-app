@@ -5,8 +5,8 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [fileCaricato, setfileCaricato] = useState("no");
-  const [fileName, setFileName] = useState("");
+  const [statoApp, setStatoApp] = useState("fileNonCaricati");
+  const [titolo, setTitolo] = useState("");
   const [testo, setTesto] = useState({});
   const [error, setError] = useState("");
   const [months, setMonths] = useState([]);
@@ -19,6 +19,7 @@ function App() {
   const [disableLeftMonth, setDisableLeftMonth] = useState(false);
   const [disableRightMonth, setDisableRightMonth] = useState(false);
 
+  // function that loads the files in memory and create an array with the uploaded months
   const handleFileChange = (event) => {
     if (event.target.files) {
       setError("");
@@ -54,66 +55,22 @@ function App() {
         });
         setMonths(monthsArray);
         setTesto(texts);
-        setFileName(monthsArray[0]);
+        setTitolo(monthsArray[0]);
       });
-
-      for (const prop of Object.getOwnPropertyNames(texts)) {
-        delete texts[prop];
-      }
     }
   };
 
-  const handleSetGiorno = (giornoDaMostrare, index) => {
-    setGiorno(giornoDaMostrare);
-    if (index === labels.length - 1) {
-      setDisableLeft(false);
-      setDisableRight(true);
-    } else if (index === 0) {
-      setDisableLeft(true);
-      setDisableRight(false);
-    } else {
-      setDisableLeft(false);
-      setDisableRight(false);
-    }
-    setDatiGiorno(valori[labels[index]]);
-    setfileCaricato("giorno");
-  };
-
+  // function that checks if files were uploaded and then goes to the "select month" page
   const handleUploadFile = () => {
-    if (fileName === "") {
+    if (titolo === "") {
       setError("Seleziona almeno un file da caricare");
       return;
     }
     for (var member in valori) delete valori[member];
-    let dati = [];
-    dati = testo[fileName].split("\n");
-    dati.shift();
-    dati.pop();
-    dati.map((dato, index) => (dati[index] = dato.split(";")));
-    dati.forEach((dato, index) => {
-      let valoriIniziali = dato[0].split(" ");
-      dato.shift();
-      valori[valoriIniziali[0]] = dato;
-    });
-
-    if (months.length === 1) {
-      setDisableLeftMonth(true);
-      setDisableRightMonth(true);
-    } else if (months.indexOf(fileName) === months.length - 1) {
-      setDisableLeftMonth(false);
-      setDisableRightMonth(true);
-    } else if (months.indexOf(fileName) === 0) {
-      setDisableLeftMonth(true);
-      setDisableRightMonth(false);
-    } else {
-      setDisableLeftMonth(false);
-      setDisableRightMonth(false);
-    }
-    setValori(valori);
-    setLabels(Object.getOwnPropertyNames(valori));
-    setfileCaricato("selezionaMese");
+    setStatoApp("selezionaMese");
   };
 
+  // function that loads some test files that are present in the public folder
   const handleClickProva = async () => {
     setError("");
     var texts = {};
@@ -137,40 +94,11 @@ function App() {
       setMonths(monthsArray);
       texts[monthAndYear] = text;
       setTesto(texts);
-      setFileName(monthsArray[0]);
     }
-
-    for (var member in valori) delete valori[member];
-
-    let dati = [];
-    dati = texts[monthsArray[0]].split("\n");
-    dati.shift();
-    dati.pop();
-    dati.map((dato, index) => (dati[index] = dato.split(";")));
-    dati.forEach((dato, index) => {
-      let valoriIniziali = dato[0].split(" ");
-      dato.shift();
-      valori[valoriIniziali[0]] = dato;
-    });
-
-    if (monthsArray.length === 1) {
-      setDisableLeftMonth(true);
-      setDisableRightMonth(true);
-    } else if (monthsArray.indexOf(monthsArray[0]) === monthsArray.length - 1) {
-      setDisableLeftMonth(false);
-      setDisableRightMonth(true);
-    } else if (monthsArray.indexOf(monthsArray[0]) === 0) {
-      setDisableLeftMonth(true);
-      setDisableRightMonth(false);
-    } else {
-      setDisableLeftMonth(false);
-      setDisableRightMonth(false);
-    }
-    setValori(valori);
-    setLabels(Object.getOwnPropertyNames(valori));
-    setfileCaricato("selezionaMese");
+    setStatoApp("selezionaMese");
   };
 
+  // function that loads the data of a specific month and then shows its graph
   const handleClickCard = (chosenMonth) => {
     //console.log(chosenMonth);
     for (var member in valori) delete valori[member];
@@ -200,17 +128,34 @@ function App() {
     }
     setValori(valori);
     setLabels(Object.getOwnPropertyNames(valori));
-    setFileName(chosenMonth);
-    setfileCaricato("caricato");
+    setTitolo(chosenMonth);
+    setStatoApp("mostraMese");
+  };
+
+  // function that loads the data of a specific day and then shows its graph
+  const handleSetGiorno = (giornoDaMostrare, index) => {
+    setGiorno(giornoDaMostrare);
+    if (index === labels.length - 1) {
+      setDisableLeft(false);
+      setDisableRight(true);
+    } else if (index === 0) {
+      setDisableLeft(true);
+      setDisableRight(false);
+    } else {
+      setDisableLeft(false);
+      setDisableRight(false);
+    }
+    setDatiGiorno(valori[labels[index]]);
+    setStatoApp("mostraGiorno");
   };
 
   return (
     <div className="d-flex flex-column h-100">
       <NavBar
-        fileCaricato={fileCaricato}
+        statoApp={statoApp}
         onClick={() => {
-          setfileCaricato("caricando");
-          setFileName("");
+          setStatoApp("caricandoFile");
+          setTitolo("");
           setTesto({});
           setMonths([]);
           setValori({});
@@ -222,11 +167,11 @@ function App() {
       ></NavBar>
       <Alert resetAlert={() => setError("")} message={error} />
       <Body
-        fileCaricato={fileCaricato}
+        statoApp={statoApp}
         handleFileChange={handleFileChange}
         onUpload={handleUploadFile}
         valori={valori}
-        fileName={fileName}
+        fileName={titolo}
         handleSetGiorno={handleSetGiorno}
         giorno={giorno}
         datiGiorno={datiGiorno}
@@ -250,7 +195,7 @@ function App() {
         }}
         changeToPreviousMonth={() => {
           setDisableRightMonth(false);
-          let index = months.indexOf(fileName);
+          let index = months.indexOf(titolo);
           if (index === 1) {
             setDisableLeftMonth(true);
           }
@@ -265,14 +210,14 @@ function App() {
             dato.shift();
             valori[valoriIniziali[0]] = dato;
           });
-          setFileName(months[index - 1]);
+          setTitolo(months[index - 1]);
           setValori(valori);
           setLabels(Object.getOwnPropertyNames(valori));
           //handleUploadFile();
         }}
         changeToNextMonth={() => {
           setDisableLeftMonth(false);
-          let index = months.indexOf(fileName);
+          let index = months.indexOf(titolo);
           if (index === months.length - 2) {
             setDisableRightMonth(true);
           }
@@ -287,7 +232,7 @@ function App() {
             dato.shift();
             valori[valoriIniziali[0]] = dato;
           });
-          setFileName(months[index + 1]);
+          setTitolo(months[index + 1]);
           setValori(valori);
           setLabels(Object.getOwnPropertyNames(valori));
           //handleUploadFile();
@@ -298,10 +243,10 @@ function App() {
         disableLeftMonth={disableLeftMonth}
         disableRightMonth={disableRightMonth}
         mostraGraficoMese={() => {
-          setfileCaricato("caricato");
+          setStatoApp("mostraMese");
         }}
         mostraSelezioneMese={() => {
-          setfileCaricato("selezionaMese");
+          setStatoApp("selezionaMese");
         }}
         months={months}
         handleClickCard={handleClickCard}

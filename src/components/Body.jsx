@@ -4,7 +4,7 @@ import SelezionaMese from "./SelezionaMese";
 import { motion } from "motion/react";
 
 function Body({
-  fileCaricato,
+  statoApp,
   handleFileChange,
   onUpload,
   valori,
@@ -26,8 +26,8 @@ function Body({
   handleClickCard,
   mostraSelezioneMese,
 }) {
-  switch (fileCaricato) {
-    case "no":
+  switch (statoApp) {
+    case "fileNonCaricati":
       return (
         <motion.div
           key={"startText"}
@@ -39,7 +39,7 @@ function Body({
           e-Distribuzione o che seguono la stessa formattazione
         </motion.div>
       );
-    case "caricando":
+    case "caricandoFile":
       return (
         <motion.div
           key={"uploadingText"}
@@ -47,6 +47,7 @@ function Body({
           animate={{ opacity: 1 }}
           className="mx-auto h-100 d-flex align-items-center row-auto"
         >
+          {/* maybe it should be changed to a form element */}
           <input
             className="form-control col m-3"
             type="file"
@@ -68,7 +69,7 @@ function Body({
       return (
         <SelezionaMese months={months} handleClickCard={handleClickCard} />
       );
-    case "caricato":
+    case "mostraMese":
       return (
         <GraficoMese
           valori={valori}
@@ -82,7 +83,7 @@ function Body({
           mostraSelezioneMese={mostraSelezioneMese}
         />
       );
-    case "giorno":
+    case "mostraGiorno":
       return (
         <GraficoGiorno
           onClickLeftButton={changeToPreviousDay}

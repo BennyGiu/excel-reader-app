@@ -1,22 +1,8 @@
 import StatCard from "./StatCard";
 import { motion } from "motion/react";
+import { monthNumberToString } from "../utils/utils";
 
 function SelezionaMese({ months, handleClickCard }) {
-  const monthNumberToString = {
-    "01": "Gennaio",
-    "02": "Febbraio",
-    "03": "Marzo",
-    "04": "Aprile",
-    "05": "Maggio",
-    "06": "Giugno",
-    "07": "Luglio",
-    "08": "Agosto",
-    "09": "Settembre",
-    10: "Ottobre",
-    11: "Novembre",
-    12: "Dicembre",
-  };
-
   return (
     <div className="container overflow-auto mw-100">
       <div className="row">
@@ -31,8 +17,9 @@ function SelezionaMese({ months, handleClickCard }) {
               (months.length < 5 ? "justify-content-center" : "")
             }
           >
-            {months.map((month, index) => (
+            {months.map((month) => (
               <StatCard
+                key={month}
                 handleClickCard={handleClickCard}
                 title={month.split("/")[1]}
                 value={monthNumberToString[month.split("/")[0]]}

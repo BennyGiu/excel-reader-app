@@ -2,14 +2,14 @@ function Alert({ message, resetAlert }) {
   return (
     <div
       hidden={message === "" ? true : false}
-      class="alert alert-danger alert-dismissible fade show mx-auto"
+      className="alert alert-danger alert-dismissible fade show mx-auto"
       role="alert"
     >
       {message}
       <button
         onClick={resetAlert}
         type="button"
-        class="btn-close"
+        className="btn-close"
         aria-label="Close"
       ></button>
     </div>

@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Button } from "react-bootstrap";
 import StatCard from "./StatCard";
 import { motion } from "motion/react";
+import { monthNumberToString } from "../utils/utils";
 
 ChartJS.register(
   CategoryScale,
@@ -40,21 +41,6 @@ function GraficoMese({
   mostraSelezioneMese,
 }) {
   const [mostraGrafico, setMostraGrafico] = useState(true);
-
-  const monthNumberToString = {
-    "01": "Gennaio",
-    "02": "Febbraio",
-    "03": "Marzo",
-    "04": "Aprile",
-    "05": "Maggio",
-    "06": "Giugno",
-    "07": "Luglio",
-    "08": "Agosto",
-    "09": "Settembre",
-    10: "Ottobre",
-    11: "Novembre",
-    12: "Dicembre",
-  };
 
   const options = {
     responsive: true,
