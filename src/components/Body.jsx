@@ -1,3 +1,4 @@
+import GraficoAnno from "./GraficoAnno";
 import GraficoGiorno from "./GraficoGiorno";
 import GraficoMese from "./GraficoMese";
 import SelezionaMese from "./SelezionaMese";
@@ -5,10 +6,11 @@ import { motion } from "motion/react";
 
 function Body({
   statoApp,
+  testo,
   handleFileChange,
   onUpload,
   valori,
-  fileName,
+  titoloGrafico,
   handleSetGiorno,
   giorno,
   datiGiorno,
@@ -16,13 +18,12 @@ function Body({
   changeToNextDay,
   changeToPreviousMonth,
   changeToNextMonth,
-  labels,
-  disableLeft,
-  disableRight,
-  disableLeftMonth,
-  disableRightMonth,
+  changeToPreviousYear,
+  changeToNextYear,
+  giorni,
   mostraGraficoMese,
   months,
+  years,
   handleClickCard,
   mostraSelezioneMese,
 }) {
@@ -69,17 +70,28 @@ function Body({
       return (
         <SelezionaMese months={months} handleClickCard={handleClickCard} />
       );
+    case "mostraAnno":
+      return (
+        <GraficoAnno
+          testo={testo}
+          mostraSelezioneMese={mostraSelezioneMese}
+          years={years}
+          months={months}
+          titoloGrafico={titoloGrafico}
+          onClickLeftButton={changeToPreviousYear}
+          onClickRightButton={changeToNextYear}
+        />
+      );
     case "mostraMese":
       return (
         <GraficoMese
+          months={months}
           valori={valori}
-          fileName={fileName}
+          titoloGrafico={titoloGrafico}
           handleSetGiorno={handleSetGiorno}
-          labels={labels}
+          giorni={giorni}
           onClickLeftButton={changeToPreviousMonth}
           onClickRightButton={changeToNextMonth}
-          disableLeft={disableLeftMonth}
-          disableRight={disableRightMonth}
           mostraSelezioneMese={mostraSelezioneMese}
         />
       );
@@ -88,10 +100,9 @@ function Body({
         <GraficoGiorno
           onClickLeftButton={changeToPreviousDay}
           onClickRightButton={changeToNextDay}
+          giorni={giorni}
           giorno={giorno}
           datiGiorno={datiGiorno}
-          disableLeft={disableLeft}
-          disableRight={disableRight}
           mostraGraficoMese={mostraGraficoMese}
         />
       );

@@ -5,19 +5,15 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [statoApp, setStatoApp] = useState("fileNonCaricati");
-  const [titolo, setTitolo] = useState("");
-  const [testo, setTesto] = useState({});
   const [error, setError] = useState("");
+  const [statoApp, setStatoApp] = useState("fileNonCaricati");
+  const [titoloGrafico, setTitoloGrafico] = useState("");
+  const [testo, setTesto] = useState({});
+  const [years, setYears] = useState([]);
   const [months, setMonths] = useState([]);
   const [giorno, setGiorno] = useState("");
   const [valori, setValori] = useState({});
-  const [labels, setLabels] = useState([]);
-  const [datiGiorno, setDatiGiorno] = useState("");
-  const [disableLeft, setDisableLeft] = useState(false);
-  const [disableRight, setDisableRight] = useState(false);
-  const [disableLeftMonth, setDisableLeftMonth] = useState(false);
-  const [disableRightMonth, setDisableRightMonth] = useState(false);
+  const [giorni, setGiorni] = useState([]);
 
   // function that loads the files in memory and create an array with the uploaded months
   const handleFileChange = (event) => {
@@ -25,6 +21,7 @@ function App() {
       setError("");
       var texts = {};
       var monthsArray = [];
+      var yearsSet = new Set();
       for (const prop of Object.getOwnPropertyNames(testo)) {
         delete testo[prop];
       }
@@ -40,6 +37,11 @@ function App() {
           );
           monthsArray.push(monthAndYear);
           texts[monthAndYear] = text;
+          let year = text.substring(
+            text.indexOf("/") + 4,
+            text.indexOf("/") + 8,
+          );
+          yearsSet.add(year);
         });
       }
 
@@ -53,21 +55,23 @@ function App() {
 
           return newMonth1 - newMonth2;
         });
+        const yearsArray = Array.from(yearsSet).sort();
+        setYears(yearsArray);
+        setTitoloGrafico(yearsArray[yearsArray.length - 1]);
         setMonths(monthsArray);
         setTesto(texts);
-        setTitolo(monthsArray[0]);
       });
     }
   };
 
   // function that checks if files were uploaded and then goes to the "select month" page
   const handleUploadFile = () => {
-    if (titolo === "") {
+    if (titoloGrafico === "") {
       setError("Seleziona almeno un file da caricare");
       return;
     }
     for (var member in valori) delete valori[member];
-    setStatoApp("selezionaMese");
+    setStatoApp("mostraAnno");
   };
 
   // function that loads some test files that are present in the public folder
@@ -75,6 +79,7 @@ function App() {
     setError("");
     var texts = {};
     var monthsArray = [];
+    var yearsSet = new Set();
     for (const prop of Object.getOwnPropertyNames(testo)) {
       delete testo[prop];
     }
@@ -91,16 +96,20 @@ function App() {
         text.indexOf("/") + 8,
       );
       monthsArray.push(monthAndYear);
-      setMonths(monthsArray);
       texts[monthAndYear] = text;
-      setTesto(texts);
+      let year = text.substring(text.indexOf("/") + 4, text.indexOf("/") + 8);
+      yearsSet.add(year);
     }
-    setStatoApp("selezionaMese");
+    const yearsArray = Array.from(yearsSet).sort();
+    setYears(yearsArray);
+    setTitoloGrafico(yearsArray[yearsArray.length - 1]);
+    setMonths(monthsArray);
+    setTesto(texts);
+    setStatoApp("mostraAnno");
   };
 
   // function that loads the data of a specific month and then shows its graph
   const handleClickCard = (chosenMonth) => {
-    //console.log(chosenMonth);
     for (var member in valori) delete valori[member];
     let dati = [];
     dati = testo[chosenMonth].split("\n");
@@ -112,40 +121,15 @@ function App() {
       dato.shift();
       valori[valoriIniziali[0]] = dato;
     });
-
-    if (months.length === 1) {
-      setDisableLeftMonth(true);
-      setDisableRightMonth(true);
-    } else if (months.indexOf(chosenMonth) === months.length - 1) {
-      setDisableLeftMonth(false);
-      setDisableRightMonth(true);
-    } else if (months.indexOf(chosenMonth) === 0) {
-      setDisableLeftMonth(true);
-      setDisableRightMonth(false);
-    } else {
-      setDisableLeftMonth(false);
-      setDisableRightMonth(false);
-    }
     setValori(valori);
-    setLabels(Object.getOwnPropertyNames(valori));
-    setTitolo(chosenMonth);
+    setGiorni(Object.getOwnPropertyNames(valori));
+    setTitoloGrafico(chosenMonth);
     setStatoApp("mostraMese");
   };
 
   // function that loads the data of a specific day and then shows its graph
   const handleSetGiorno = (giornoDaMostrare, index) => {
     setGiorno(giornoDaMostrare);
-    if (index === labels.length - 1) {
-      setDisableLeft(false);
-      setDisableRight(true);
-    } else if (index === 0) {
-      setDisableLeft(true);
-      setDisableRight(false);
-    } else {
-      setDisableLeft(false);
-      setDisableRight(false);
-    }
-    setDatiGiorno(valori[labels[index]]);
     setStatoApp("mostraGiorno");
   };
 
@@ -155,12 +139,11 @@ function App() {
         statoApp={statoApp}
         onClick={() => {
           setStatoApp("caricandoFile");
-          setTitolo("");
+          setTitoloGrafico("");
           setTesto({});
           setMonths([]);
           setValori({});
-          setLabels([]);
-          setDatiGiorno("");
+          setGiorni([]);
           setGiorno("");
         }}
         onClickProva={handleClickProva}
@@ -168,37 +151,24 @@ function App() {
       <Alert resetAlert={() => setError("")} message={error} />
       <Body
         statoApp={statoApp}
+        testo={testo}
         handleFileChange={handleFileChange}
         onUpload={handleUploadFile}
         valori={valori}
-        fileName={titolo}
+        titoloGrafico={titoloGrafico}
         handleSetGiorno={handleSetGiorno}
         giorno={giorno}
-        datiGiorno={datiGiorno}
+        datiGiorno={valori[giorno]}
         changeToPreviousDay={() => {
-          setDisableRight(false);
-          let index = labels.indexOf(giorno);
-          if (index === 1) {
-            setDisableLeft(true);
-          }
-          setGiorno(labels[index - 1]);
-          setDatiGiorno(valori[labels[index - 1]]);
+          let index = giorni.indexOf(giorno);
+          setGiorno(giorni[index - 1]);
         }}
         changeToNextDay={() => {
-          setDisableLeft(false);
-          let index = labels.indexOf(giorno);
-          if (index === labels.length - 2) {
-            setDisableRight(true);
-          }
-          setGiorno(labels[index + 1]);
-          setDatiGiorno(valori[labels[index + 1]]);
+          let index = giorni.indexOf(giorno);
+          setGiorno(giorni[index + 1]);
         }}
         changeToPreviousMonth={() => {
-          setDisableRightMonth(false);
-          let index = months.indexOf(titolo);
-          if (index === 1) {
-            setDisableLeftMonth(true);
-          }
+          let index = months.indexOf(titoloGrafico);
           for (var member in valori) delete valori[member];
           let dati = [];
           dati = testo[months[index - 1]].split("\n");
@@ -210,17 +180,12 @@ function App() {
             dato.shift();
             valori[valoriIniziali[0]] = dato;
           });
-          setTitolo(months[index - 1]);
+          setTitoloGrafico(months[index - 1]);
           setValori(valori);
-          setLabels(Object.getOwnPropertyNames(valori));
-          //handleUploadFile();
+          setGiorni(Object.getOwnPropertyNames(valori));
         }}
         changeToNextMonth={() => {
-          setDisableLeftMonth(false);
-          let index = months.indexOf(titolo);
-          if (index === months.length - 2) {
-            setDisableRightMonth(true);
-          }
+          let index = months.indexOf(titoloGrafico);
           for (var member in valori) delete valori[member];
           let dati = [];
           dati = testo[months[index + 1]].split("\n");
@@ -232,16 +197,19 @@ function App() {
             dato.shift();
             valori[valoriIniziali[0]] = dato;
           });
-          setTitolo(months[index + 1]);
+          setTitoloGrafico(months[index + 1]);
           setValori(valori);
-          setLabels(Object.getOwnPropertyNames(valori));
-          //handleUploadFile();
+          setGiorni(Object.getOwnPropertyNames(valori));
         }}
-        labels={labels}
-        disableLeft={disableLeft}
-        disableRight={disableRight}
-        disableLeftMonth={disableLeftMonth}
-        disableRightMonth={disableRightMonth}
+        changeToNextYear={() => {
+          let index = years.indexOf(titoloGrafico);
+          setTitoloGrafico(years[index + 1]);
+        }}
+        changeToPreviousYear={() => {
+          let index = years.indexOf(titoloGrafico);
+          setTitoloGrafico(years[index - 1]);
+        }}
+        giorni={giorni}
         mostraGraficoMese={() => {
           setStatoApp("mostraMese");
         }}
@@ -249,6 +217,7 @@ function App() {
           setStatoApp("selezionaMese");
         }}
         months={months}
+        years={years}
         handleClickCard={handleClickCard}
       ></Body>
     </div>

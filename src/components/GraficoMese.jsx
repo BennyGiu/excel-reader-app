@@ -30,17 +30,34 @@ ChartJS.register(
 );
 
 function GraficoMese({
+  months,
   valori,
-  fileName,
+  titoloGrafico,
   handleSetGiorno,
-  labels,
-  disableLeft,
+  giorni,
   onClickLeftButton,
-  disableRight,
   onClickRightButton,
   mostraSelezioneMese,
 }) {
   const [mostraGrafico, setMostraGrafico] = useState(true);
+
+  const labels = giorni;
+  var disableLeft;
+  var disableRight;
+
+  if (months.length === 1) {
+    disableLeft = true;
+    disableRight = true;
+  } else if (months.indexOf(titoloGrafico) === months.length - 1) {
+    disableLeft = false;
+    disableRight = true;
+  } else if (months.indexOf(titoloGrafico) === 0) {
+    disableLeft = true;
+    disableRight = false;
+  } else {
+    disableLeft = false;
+    disableRight = false;
+  }
 
   const options = {
     responsive: true,
@@ -50,13 +67,13 @@ function GraficoMese({
       },
       title: {
         display: true,
-        text: fileName,
+        text: titoloGrafico,
       },
     },
     onClick: (event, activeElements) => {
       if (activeElements[0]) {
         let index = activeElements[0]["index"];
-        handleSetGiorno(labels[index], index);
+        handleSetGiorno(giorni[index], index);
       }
     },
   };
@@ -66,7 +83,7 @@ function GraficoMese({
     datasets: [
       {
         label: "kWh",
-        data: labels.map((item) => {
+        data: giorni.map((item) => {
           let dayArray = [];
           dayArray = valori[item];
           return dayArray.reduce((a, b) => +a + +b, 0);
@@ -312,9 +329,9 @@ function GraficoMese({
                 >
                   <div className="text-center fs-5 m-1">
                     Statistiche{" "}
-                    {monthNumberToString[fileName.split("/")[0]] +
+                    {monthNumberToString[titoloGrafico.split("/")[0]] +
                       " " +
-                      fileName.split("/")[1]}
+                      titoloGrafico.split("/")[1]}
                   </div>
                   <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 p-1">
                     <StatCard

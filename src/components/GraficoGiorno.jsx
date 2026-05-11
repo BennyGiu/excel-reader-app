@@ -28,15 +28,31 @@ ChartJS.register(
 );
 
 function GraficoGiorno({
+  giorni,
   giorno,
   datiGiorno,
   onClickLeftButton,
   onClickRightButton,
-  disableLeft,
-  disableRight,
   mostraGraficoMese,
 }) {
   const [intervalloGrafico, setIntervalloGrafico] = useState("60");
+
+  var disableLeft;
+  var disableRight;
+
+  if (giorni.length === 1) {
+    disableLeft = true;
+    disableRight = true;
+  } else if (giorni.indexOf(giorno) === giorni.length - 1) {
+    disableLeft = false;
+    disableRight = true;
+  } else if (giorni.indexOf(giorno) === 0) {
+    disableLeft = true;
+    disableRight = false;
+  } else {
+    disableLeft = false;
+    disableRight = false;
+  }
 
   const options = {
     responsive: true,
