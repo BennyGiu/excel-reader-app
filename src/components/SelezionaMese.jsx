@@ -2,12 +2,21 @@ import StatCard from "./StatCard";
 import { motion } from "motion/react";
 import { monthNumberToString } from "../utils/utils";
 
-function SelezionaMese({ months, handleClickCard }) {
+function SelezionaMese({ months, handleClickCard, mostraGraficoAnno }) {
   return (
-    <div className="container overflow-auto mw-100">
-      <div className="row">
+    <div className="d-flex flex-column overflow-auto">
+      <div className="d-flex flex-row justify-content-center mb-2">
+        <button
+          type="button"
+          className="btn btn-light mx-auto"
+          onClick={() => mostraGraficoAnno()}
+        >
+          Mostra Grafico Annuale
+        </button>
+      </div>
+      <div className="d-flex flex-row overflow-auto">
         <div className="col"></div>
-        <div className="container col-6 flex-grow-1">
+        <div className="container col-6 flex-grow-1 mh-0 ">
           <motion.div
             key={"selezioneMese"}
             initial={{ opacity: 0 }}

@@ -38,6 +38,7 @@ function GraficoMese({
   onClickLeftButton,
   onClickRightButton,
   mostraSelezioneMese,
+  mostraGraficoAnno,
 }) {
   const [mostraGrafico, setMostraGrafico] = useState(true);
 
@@ -73,7 +74,7 @@ function GraficoMese({
     onClick: (event, activeElements) => {
       if (activeElements[0]) {
         let index = activeElements[0]["index"];
-        handleSetGiorno(giorni[index], index);
+        handleSetGiorno(giorni[index]);
       }
     },
   };
@@ -267,6 +268,13 @@ function GraficoMese({
   return (
     <div className="flex-grow-1 overflow-auto mb-2 d-flex flex-column align-items-center">
       <div className="d-flex flex-row justify-content-center align-items-center mb-2">
+        <button
+          type="button"
+          className="btn btn-light mx-2"
+          onClick={() => mostraGraficoAnno()}
+        >
+          Mostra Grafico Annuale
+        </button>
         <button
           type="button"
           className="btn btn-light mx-2"

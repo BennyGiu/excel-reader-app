@@ -87,6 +87,8 @@ function App() {
       process.env.PUBLIC_URL + "/2024-04.csv",
       process.env.PUBLIC_URL + "/2024-05.csv",
       process.env.PUBLIC_URL + "/2024-06.csv",
+      process.env.PUBLIC_URL + "/2025-07.csv",
+      process.env.PUBLIC_URL + "/2025-08.csv",
     ];
     for (const file of file_di_prova) {
       const handleFile = await fetch(file);
@@ -128,7 +130,7 @@ function App() {
   };
 
   // function that loads the data of a specific day and then shows its graph
-  const handleSetGiorno = (giornoDaMostrare, index) => {
+  const handleSetGiorno = (giornoDaMostrare) => {
     setGiorno(giornoDaMostrare);
     setStatoApp("mostraGiorno");
   };
@@ -215,6 +217,11 @@ function App() {
         }}
         mostraSelezioneMese={() => {
           setStatoApp("selezionaMese");
+        }}
+        mostraGraficoAnno={() => {
+          if (titoloGrafico.length !== 4)
+            setTitoloGrafico(titoloGrafico.split("/")[1]);
+          setStatoApp("mostraAnno");
         }}
         months={months}
         years={years}

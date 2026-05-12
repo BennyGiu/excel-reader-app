@@ -26,6 +26,7 @@ function Body({
   years,
   handleClickCard,
   mostraSelezioneMese,
+  mostraGraficoAnno,
 }) {
   switch (statoApp) {
     case "fileNonCaricati":
@@ -68,7 +69,11 @@ function Body({
       );
     case "selezionaMese":
       return (
-        <SelezionaMese months={months} handleClickCard={handleClickCard} />
+        <SelezionaMese
+          months={months}
+          handleClickCard={handleClickCard}
+          mostraGraficoAnno={mostraGraficoAnno}
+        />
       );
     case "mostraAnno":
       return (
@@ -80,6 +85,7 @@ function Body({
           titoloGrafico={titoloGrafico}
           onClickLeftButton={changeToPreviousYear}
           onClickRightButton={changeToNextYear}
+          handleSetMonth={handleClickCard}
         />
       );
     case "mostraMese":
@@ -93,6 +99,7 @@ function Body({
           onClickLeftButton={changeToPreviousMonth}
           onClickRightButton={changeToNextMonth}
           mostraSelezioneMese={mostraSelezioneMese}
+          mostraGraficoAnno={mostraGraficoAnno}
         />
       );
     case "mostraGiorno":

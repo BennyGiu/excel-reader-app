@@ -15,7 +15,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import StatCard from "./StatCard";
-import { monthStringToNumber } from "../utils/utils";
+import { monthStringToNumber, monthNumberToString } from "../utils/utils";
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +37,7 @@ function GraficoAnno({
   titoloGrafico,
   onClickLeftButton,
   onClickRightButton,
+  handleSetMonth,
 }) {
   const [mostraGrafico, setMostraGrafico] = useState(true);
 
@@ -87,6 +88,41 @@ function GraficoAnno({
     }
   }
 
+  var kWhTotali = 0;
+  var kWhMin = 0;
+  var kWhMax = 0;
+  var meseMin = "";
+  var meseMax = "";
+  var kWhAvg = 0;
+
+  for (let i = 0; i < 12; i++) {
+    if (+monthsConsumption[i] !== 0) {
+      kWhTotali += +monthsConsumption[i];
+      if (meseMin === "") {
+        meseMin = i;
+        kWhMin = +monthsConsumption[i];
+      } else {
+        if (+monthsConsumption[i] < kWhMin) {
+          meseMin = i;
+          kWhMin = +monthsConsumption[i];
+        }
+      }
+      if (meseMax === "") {
+        meseMax = i;
+        kWhMax = +monthsConsumption[i];
+      } else {
+        if (+monthsConsumption[i] > kWhMax) {
+          meseMax = i;
+          kWhMax = +monthsConsumption[i];
+        }
+      }
+    }
+  }
+
+  meseMax++;
+  meseMin++;
+  kWhAvg = (kWhTotali / monthsInChosenYear.length).toFixed(2);
+
   const options = {
     responsive: true,
     plugins: {
@@ -97,6 +133,14 @@ function GraficoAnno({
         display: true,
         text: titoloGrafico,
       },
+    },
+    onClick: (event, activeElements) => {
+      if (activeElements[0]) {
+        let index = activeElements[0]["index"] + 1;
+        let monthNumber = index < 10 ? "0" + index : index;
+        let monthAndYear = monthNumber + "/" + titoloGrafico;
+        handleSetMonth(monthAndYear);
+      }
     },
   };
 
@@ -176,11 +220,42 @@ function GraficoAnno({
                   animate={{ opacity: 1 }}
                   className="container overflow-auto"
                 >
-                  <div className="text-center fs-5 m-1">Statistiche anno</div>
+                  <div className="text-center fs-5 m-1">
+                    Statistiche {titoloGrafico}
+                  </div>
                   <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 p-1">
                     <StatCard
                       title="kWh Totali"
-                      value={"Prova"}
+                      value={kWhTotali + " kWh"}
+                      handleClickCard={() => void 0}
+                    />
+                    <StatCard
+                      title="Mese con più kWh"
+                      value={
+                        monthNumberToString[
+                          meseMax < 10 ? "0" + meseMax : meseMax
+                        ] +
+                        " con " +
+                        kWhMax +
+                        " kWh"
+                      }
+                      handleClickCard={() => void 0}
+                    />
+                    <StatCard
+                      title="Mese con meno kWh"
+                      value={
+                        monthNumberToString[
+                          meseMin < 10 ? "0" + meseMin : meseMin
+                        ] +
+                        " con " +
+                        kWhMin +
+                        " kWh"
+                      }
+                      handleClickCard={() => void 0}
+                    />
+                    <StatCard
+                      title="Media mensile kWh consumati"
+                      value={kWhAvg + " kWh al mese"}
                       handleClickCard={() => void 0}
                     />
                   </div>
